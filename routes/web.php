@@ -22,4 +22,8 @@ Route::get('logout', 'AuthController@logout')->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('home', 'HomeController@index')->name('home');
     Route::get('users', 'UserController@index')->name('users.index');
+
+    Route::get('virements', 'VirementController@index')->name('virements.index');
+    Route::post('virements', 'VirementController@store')->name('virements.store');
+    Route::get('virements/show/{id}', 'VirementController@show')->name('virements.show');
 });

@@ -14,9 +14,9 @@
                         <i class="dripicons-meter"></i>
                         <span> Dashboard </span>
                     </a>
-                    <a href="#">
+                    <a href="{{ route('virements.index') }}">
                         <i class="icon-chart"></i>
-                        <span> Transactions </span>
+                        <span> Virements </span>
                     </a>
                 </li>
 

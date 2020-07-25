@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Virement extends Model
 {
     protected $filable = [
-        'libelle', 'description', 'bordereau'
+        'description', 'bordereau', 'created_at', 'updated_at', 'libelle'
     ];
 }
