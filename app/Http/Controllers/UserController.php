@@ -11,4 +11,11 @@ class UserController extends Controller
     {
         // TODO : CREER UN UTILISATEUR
     }
+
+    public function index()
+    {
+        $users = User::all();
+
+        return view('users.index', compact('users'));
+    }
 }

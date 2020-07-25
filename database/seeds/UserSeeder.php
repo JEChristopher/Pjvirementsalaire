@@ -19,6 +19,8 @@ class UserSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => Hash::make('admin@2020'),
             'is_active' => true,
+            'created_at' => NOW(),
+            'updated_at' => NOW(),
         ]);
     }
 }

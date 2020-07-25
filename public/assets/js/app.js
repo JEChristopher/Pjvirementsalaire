@@ -135,6 +135,7 @@ File: Main Js File
         });
     },
 
+
     //initilizing
     Components.prototype.init = function () {
         var $this = this;
@@ -242,7 +243,6 @@ function ($) {
             $(this).toggleClass('open');
             $('#navigation').slideToggle(400);
         });
-
     },
 
     /** 

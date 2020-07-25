@@ -21,4 +21,5 @@ Route::get('logout', 'AuthController@logout')->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('home', 'HomeController@index')->name('home');
+    Route::get('users', 'UserController@index')->name('users.index');
 });

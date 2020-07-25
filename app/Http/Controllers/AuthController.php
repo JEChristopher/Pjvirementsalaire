@@ -35,6 +35,8 @@ class AuthController extends Controller
         $user = Auth::user();
         if ($user) {
             $user->last_login = NOW();
+            $user->updated_at = NOW();
+            $user->save();
             Auth::logout();
         }
         return redirect()->route('login-form');
