@@ -32,6 +32,11 @@ class AuthController extends Controller
 
     public function logout()
     {
-        // TODO : DECONNECTER L'UTILISATEUR
+        $user = Auth::user();
+        if ($user) {
+            $user->last_login = NOW();
+            Auth::logout();
+        }
+        return redirect()->route('login-form');
     }
 }
