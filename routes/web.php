@@ -26,4 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::get('virements', 'VirementController@index')->name('virements.index');
     Route::post('virements', 'VirementController@store')->name('virements.store');
     Route::get('virements/show/{id}', 'VirementController@show')->name('virements.show');
+    Route::get('/transfert/{id}', 'VirementController@action')->name('virements.action');
 });
+Route::any('/notify', 'notifyController@notify');

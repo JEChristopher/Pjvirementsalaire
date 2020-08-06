@@ -64,7 +64,8 @@
                     </tbody>
                 </table>
                 <div class="col-md-12 text-center">
-                    <a href="#custom-modal" class="btn btn-success waves-effect width-md" data-animation="contentscale" data-plugin="custommodal" data-overlaySpeed="100" data-overlayColor="#36404a">Lancer le virement</a>
+                    {{-- <a href="#custom-modal" class="btn btn-success waves-effect width-md" data-animation="contentscale" data-plugin="custommodal" data-overlaySpeed="100" data-overlayColor="#36404a">Lancer le virement</a> --}}
+                    <a href="{{ route('virements.action', ['id' => $virement_id]) }}" class="btn btn-success waves-effect width-md">Lancer le virement</a>
                 </div>
             </div>
         </div>

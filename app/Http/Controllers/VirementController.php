@@ -47,6 +47,7 @@ class VirementController extends Controller
     public function show($id)
     {
         $virement = Virement::findOrFail($id);
+        $virement_id = $id;
 
         $path = public_path() . DIRECTORY_SEPARATOR . 'storage'. DIRECTORY_SEPARATOR . 'bordereaux' . DIRECTORY_SEPARATOR;
         $fileType = pathinfo($path . $virement->bordereau, PATHINFO_EXTENSION); // Récupération du type de fichier
@@ -56,6 +57,57 @@ class VirementController extends Controller
         $details = $spreadsheet->getActiveSheet()->toArray();
         $details = array_slice($details, 1);
 
-        return view('virements.show', compact('details'));
+        return view('virements.show', compact('details', 'virement_id'));
+    }
+
+    public function action($id)
+    {
+        $virement = Virement::findOrFail($id);
+        $url = 'https://client.cinetpay.com/v1/auth/login';
+
+        $path = public_path() . DIRECTORY_SEPARATOR . 'storage'. DIRECTORY_SEPARATOR . 'bordereaux' . DIRECTORY_SEPARATOR;
+        $fileType = pathinfo($path . $virement->bordereau, PATHINFO_EXTENSION); // Récupération du type de fichier
+        $reader = IOFactory::createReader(ucfirst($fileType)); // Utilisation du plugin pour charger le fichier
+        $spreadsheet = $reader->load($path . $virement->bordereau);
+        $spreadsheet = IOFactory::load($path . $virement->bordereau);
+        $details = $spreadsheet->getActiveSheet()->toArray();
+        $details = array_slice($details, 1);
+
+        $params = array(
+            'apikey' => '2707816745e2ef79db6e376.09146112',
+            'password' => 'Mercipapa23021998'
+        );
+
+        $result = Helpers::generateToken($url, $params);
+
+        $result = json_decode($result);
+        $token = (array) $result->data;
+        $token = $token['token'];
+
+        $this->addContact($details, $token);
+
+        dd($token);
+    }
+
+    public function addContact($data, $token)
+    {
+        $url = 'https://client.cinetpay.com/v1/transfer/contact?token=' . $token . '&lang=fr';
+
+        $params = array();
+
+        foreach ($data as $info) {
+            $params[] = [
+                'prefix' => '225',
+                'phone' => $info[2],
+                // 'name' => 'Test',
+                // 'surname' => 'Test surname',
+                // 'email' => 'test@email.com'
+            ];
+        }
+        $data = array('data' => json_encode($params));
+        dd($data);
+
+        $result = Helpers::generateToken($url, $data);
+        dd($result);
     }
 }
