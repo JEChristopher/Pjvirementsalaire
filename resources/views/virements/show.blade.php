@@ -38,13 +38,12 @@
                     <thead>
                         <tr>
                             <th>Matricule</th>
-                            <th>Nom et prénoms</th>
-                            <th>NET A PAYER</th>
-                            <th>Code Banque</th>
-                            <th>Code guichet</th>
-                            <th>N° Compte</th>
-                            <th>Domiciliation Bancaire</th>
+                            <th>Nom</th>
+                            <th>Prénoms</th>
+                            <th>Préfix</th>
                             <th>Téléphone</th>
+                            <th>Email</th>
+                            <th>Montant</th>
                         </tr>
                     </thead>
 
@@ -58,7 +57,6 @@
                                 <td>{{ $detail[4] }}</td>
                                 <td>{{ $detail[5] }}</td>
                                 <td>{{ $detail[6] }}</td>
-                                <td>{{ $detail[7] }}</td>
                             </tr>
                         @endforeach
                     </tbody>

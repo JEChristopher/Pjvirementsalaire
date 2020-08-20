@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helpers;
+use App\Transaction;
 use App\Virement;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -60,6 +61,9 @@ class VirementController extends Controller
         return view('virements.show', compact('details', 'virement_id'));
     }
 
+    /**
+     * Fonction d'initiation et de paiement.
+     */
     public function action($id)
     {
         $virement = Virement::findOrFail($id);
@@ -73,22 +77,70 @@ class VirementController extends Controller
         $details = $spreadsheet->getActiveSheet()->toArray();
         $details = array_slice($details, 1);
 
+        $transaction = new Transaction();
+
         $params = array(
             'apikey' => '2707816745e2ef79db6e376.09146112',
             'password' => 'Mercipapa23021998'
         );
 
-        $result = Helpers::generateToken($url, $params);
+        $result = Helpers::curlPost($url, $params);
+        $client_trans_id = "FTZ." . date('ymd') . "." . date("His") . "." . Helpers::generateRandomString(5);
+
 
         $result = json_decode($result);
         $token = (array) $result->data;
         $token = $token['token'];
 
-        $this->addContact($details, $token);
+        $contact_result = $this->addContact($details, $token);
+        $contact_result = json_decode($contact_result);
+        if ($contact_result) {
+            $contact_result = $contact_result->data[0];
+            $lot = $contact_result[0]->lot;
+        }
+
+        foreach($details as $detail) {
+            $transaction->amount = $detail[6];
+            $transaction->prefix = $detail[3];
+            $transaction->phone = $detail[4];
+            $transaction->client_transaction_id = $client_trans_id;
+            $transaction->lot = $lot;
+            $transaction->sending_statuts = "PENDING";
+            $transaction->updated_at = NOW();
+            $transaction->created_at = NOW();
+
+            $transaction->save();
+
+            $this->pay($detail, $client_trans_id, $token, "fr");
+        }
 
         dd($token);
     }
 
+    /**
+     * Fonction d'envoie d'argent
+     */
+    public function pay($detail, $client_trans_id, $token, $lang = "fr") {
+        $url = "https://client.cinetpay.com/v1/transfer/money/send/contact?token=" . $token . "&lang=fr" . "&transaction_id=" . $client_trans_id;
+        $notify_url = action('notifyController@notify');
+        dd($url);
+
+        $params[] = [
+            'prefix' => $detail[3],
+            'phone' => $detail[4],
+            'amount' => $detail[6],
+            'notify_url' => $notify_url,
+            'client_transaction_id' => $client_trans_id,
+        ];
+
+        $data = array('data' => json_encode($params));
+
+        $result = Helpers::curlPost($url, $data);
+    }
+
+    /**
+     * Fonction d'ajout de contacts
+     */
     public function addContact($data, $token)
     {
         $url = 'https://client.cinetpay.com/v1/transfer/contact?token=' . $token . '&lang=fr';
@@ -97,17 +149,17 @@ class VirementController extends Controller
 
         foreach ($data as $info) {
             $params[] = [
-                'prefix' => '225',
-                'phone' => $info[2],
-                // 'name' => 'Test',
-                // 'surname' => 'Test surname',
-                // 'email' => 'test@email.com'
+                'prefix' => $info[3],
+                'phone' => $info[4],
+                'name' => $info[1],
+                'surname' => $info[2],
+                'email' => $info[5]
             ];
         }
         $data = array('data' => json_encode($params));
-        dd($data);
 
-        $result = Helpers::generateToken($url, $data);
-        dd($result);
+        $result = Helpers::curlPost($url, $data);
+
+        return $result;
     }
 }
