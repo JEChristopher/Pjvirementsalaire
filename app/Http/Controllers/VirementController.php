@@ -92,19 +92,19 @@ class VirementController extends Controller
         $token = (array) $result->data;
         $token = $token['token'];
 
-        $contact_result = $this->addContact($details, $token);
-        $contact_result = json_decode($contact_result);
-        if ($contact_result) {
-            $contact_result = $contact_result->data[0];
-            $lot = $contact_result[0]->lot;
-        }
+        // $contact_result = $this->addContact($details, $token);
+        // $contact_result = json_decode($contact_result);
+        // if ($contact_result) {
+        //     $contact_result = $contact_result->data[0];
+        //     $lot = $contact_result[0]->lot;
+        // }
 
         foreach($details as $detail) {
             $transaction->amount = $detail[6];
             $transaction->prefix = $detail[3];
             $transaction->phone = $detail[4];
             $transaction->client_transaction_id = $client_trans_id;
-            $transaction->lot = $lot;
+            $transaction->lot = isset($lot) ? $lot : '';
             $transaction->sending_statuts = "PENDING";
             $transaction->updated_at = NOW();
             $transaction->created_at = NOW();
@@ -121,9 +121,9 @@ class VirementController extends Controller
      * Fonction d'envoie d'argent
      */
     public function pay($detail, $client_trans_id, $token, $lang = "fr") {
-        $url = "https://client.cinetpay.com/v1/transfer/money/send/contact?token=" . $token . "&lang=fr" . "&transaction_id=" . $client_trans_id;
-        $notify_url = action('notifyController@notify');
-        dd($url);
+        $url = "https://client.cinetpay.com/v1/transfer/money/send/contact?token=" . $token . "&lang=" . $lang . "&transaction_id=" . $client_trans_id;
+        // $notify_url = action('notifyController@notify');
+        $notify_url = 'https://api.cinetpay.com';
 
         $params[] = [
             'prefix' => $detail[3],
@@ -135,7 +135,21 @@ class VirementController extends Controller
 
         $data = array('data' => json_encode($params));
 
-        $result = Helpers::curlPost($url, $data);
+        try {
+            $result = Helpers::curlPost($url, $data);
+            $response = json_decode($result);
+
+            if ($response->code == 0) {
+                //
+            } else {
+                dd($response);
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            dump($e->getMessage());
+            die();
+        }
     }
 
     /**
