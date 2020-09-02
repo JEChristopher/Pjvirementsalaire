@@ -85,24 +85,24 @@ class VirementController extends Controller
         );
 
         $result = Helpers::curlPost($url, $params);
-        $client_trans_id = "FTZ." . date('ymd') . "." . date("His") . "." . Helpers::generateRandomString(5);
+        $client_trans_id = "FTZ." . date('ymd') . "." . date("His") . "." . Helpers::generateRandomString(5) . md5(date("Ymdhis"));
 
 
         $result = json_decode($result);
         $token = (array) $result->data;
         $token = $token['token'];
 
-        // $contact_result = $this->addContact($details, $token);
-        // $contact_result = json_decode($contact_result);
-        // if ($contact_result) {
-        //     $contact_result = $contact_result->data[0];
-        //     $lot = $contact_result[0]->lot;
-        // }
+        $contact_result = $this->addContact($details, $token);
+        $contact_result = json_decode($contact_result);
+        if ($contact_result) {
+            $contact_result = $contact_result->data[0];
+            $lot = $contact_result[0]->lot;
+        }
 
         foreach($details as $detail) {
             $transaction->amount = $detail[6];
             $transaction->prefix = $detail[3];
-            $transaction->phone = $detail[4];
+            $transaction->phone = substr($detail[4], 3);
             $transaction->client_transaction_id = $client_trans_id;
             $transaction->lot = isset($lot) ? $lot : '';
             $transaction->sending_statuts = "PENDING";
@@ -111,10 +111,10 @@ class VirementController extends Controller
 
             $transaction->save();
 
-            $this->pay($detail, $client_trans_id, $token, "fr");
+            $transaction_begin = $this->pay($detail, $client_trans_id, $token, "fr");
         }
 
-        dd($token);
+        dd($transaction_begin);
     }
 
     /**
@@ -127,7 +127,7 @@ class VirementController extends Controller
 
         $params[] = [
             'prefix' => $detail[3],
-            'phone' => $detail[4],
+            'phone' => substr($detail[4], 3),
             'amount' => $detail[6],
             'notify_url' => $notify_url,
             'client_transaction_id' => $client_trans_id,
@@ -135,13 +135,27 @@ class VirementController extends Controller
 
         $data = array('data' => json_encode($params));
 
+        // dd($data);
+
         try {
             $result = Helpers::curlPost($url, $data);
             $response = json_decode($result);
 
             if ($response->code == 0) {
-                //
+                $response = $response->data[0][0];
+                $transaction = Transaction::where('client_transaction_id', $response->client_transaction_id)->first();
+                $transaction->cp_treatment_status = $response->treatment_status;
+                $transaction->transaction_id = $response->transaction_id;
+                $transaction->status = $response->transaction_id;
+
+                $transaction->save();
+                dump("Tout est Ok");
             } else {
+                $response = $response->data[0];
+                $transaction = Transaction::where('client_transaction_id', $response->client_transaction_id)->first();
+                $transaction->status = $response->status;
+
+                $transaction->save();
                 dd($response);
             }
 
@@ -164,7 +178,7 @@ class VirementController extends Controller
         foreach ($data as $info) {
             $params[] = [
                 'prefix' => $info[3],
-                'phone' => $info[4],
+                'phone' => substr($info[4], 3),
                 'name' => $info[1],
                 'surname' => $info[2],
                 'email' => $info[5]

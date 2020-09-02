@@ -23,6 +23,17 @@
 @endsection
 @section('content')
     <div class="row">
-        <h1>Hello</h1>
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <blockquote class="card-bodyquote mb-0">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere
+                            erat a ante.</p>
+                        <footer class="blockquote-footer text-white-50"> Someone famous in <cite title="Source Title">Source Title</cite>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

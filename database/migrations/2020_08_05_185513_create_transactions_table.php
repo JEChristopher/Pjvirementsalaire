@@ -17,13 +17,15 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->integer('amount');
             $table->integer('prefix');
-            $table->integer('phone');
+            $table->string('phone');
             $table->string('cp_code')->nullable();
             $table->string('client_transaction_id');
             $table->string('transaction_id')->nullable();
             $table->string('operator_transaction_id')->nullable();
             $table->string('lot')->nullable();
-            $table->string('cp_treatement_status')->nullable();
+            $table->string('cp_treatment_status')->nullable();
+            $table->string('status')->nullable();
+
 
             $table->string('cp_operator')->nullable();
             $table->string('cp_pay_id')->nullable();
