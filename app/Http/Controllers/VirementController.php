@@ -94,6 +94,7 @@ class VirementController extends Controller
 
         $contact_result = $this->addContact($details, $token);
         $contact_result = json_decode($contact_result);
+
         if ($contact_result) {
             $contact_result = $contact_result->data[0];
             $lot = $contact_result[0]->lot;
@@ -102,7 +103,7 @@ class VirementController extends Controller
         foreach($details as $detail) {
             $transaction->amount = $detail[6];
             $transaction->prefix = $detail[3];
-            $transaction->phone = substr($detail[4], 3);
+            $transaction->phone = $detail[4];
             $transaction->client_transaction_id = $client_trans_id;
             $transaction->lot = isset($lot) ? $lot : '';
             $transaction->sending_statuts = "PENDING";
@@ -111,10 +112,10 @@ class VirementController extends Controller
 
             $transaction->save();
 
-            $transaction_begin = $this->pay($detail, $client_trans_id, $token, "fr");
+            $this->pay($detail, $client_trans_id, $token, "fr");
         }
 
-        dd($transaction_begin);
+        return redirect()->route('virements.index')->with('succes', 'Le virement lancé, en attente de confirmation');
     }
 
     /**
@@ -127,7 +128,7 @@ class VirementController extends Controller
 
         $params[] = [
             'prefix' => $detail[3],
-            'phone' => substr($detail[4], 3),
+            'phone' => $detail[4],
             'amount' => $detail[6],
             'notify_url' => $notify_url,
             'client_transaction_id' => $client_trans_id,
@@ -146,17 +147,19 @@ class VirementController extends Controller
                 $transaction = Transaction::where('client_transaction_id', $response->client_transaction_id)->first();
                 $transaction->cp_treatment_status = $response->treatment_status;
                 $transaction->transaction_id = $response->transaction_id;
-                $transaction->status = $response->transaction_id;
+                $transaction->status = $response->status;
+                $transaction->updated_at = date('Y-m-d H:i:s');
 
                 $transaction->save();
-                dump("Tout est Ok");
             } else {
                 $response = $response->data[0];
                 $transaction = Transaction::where('client_transaction_id', $response->client_transaction_id)->first();
                 $transaction->status = $response->status;
+                $transaction->updated_at = date('Y-m-d H:i:s');
 
                 $transaction->save();
-                dd($response);
+                dump($response->description);
+                die();
             }
 
             return $result;
@@ -178,7 +181,7 @@ class VirementController extends Controller
         foreach ($data as $info) {
             $params[] = [
                 'prefix' => $info[3],
-                'phone' => substr($info[4], 3),
+                'phone' => $info[4],
                 'name' => $info[1],
                 'surname' => $info[2],
                 'email' => $info[5]
