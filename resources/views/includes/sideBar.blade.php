@@ -7,16 +7,16 @@
 
             <ul class="metismenu" id="side-menu">
 
-                <li class="menu-title">Navigation</li>
+                <li class="menu-title">Digitalisation de la paie</li>
 
                 <li>
                     <a href="{{ route('home') }}">
                         <i class="dripicons-meter"></i>
-                        <span> Dashboard </span>
+                        <span> Tableaud de bord</span>
                     </a>
                     <a href="{{ route('virements.index') }}">
                         <i class="icon-chart"></i>
-                        <span> Virements </span>
+                        <span> Virement Mobile </span>
                     </a>
                 </li>
 

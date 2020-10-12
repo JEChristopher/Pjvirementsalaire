@@ -2,7 +2,7 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8" />
-        <title>SRH FIRST</title>
+        <title>SRHFIRST</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="SRH FIRST" name="description" />
         <meta content="Coderthemes" name="Christopher" />

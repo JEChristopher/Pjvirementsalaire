@@ -2,7 +2,7 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8" />
-        <title>SRH FIRST</title>
+        <title>SRHFIRST</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -34,14 +34,14 @@
 
                                 <div class="text-center mb-4">
                                     <a href="index.html">
-                                        <span><img src="assets/images/logo-dark.png" alt="" height="28"></span>
+                                        <span><img src="assets/images/srhfirstlog.png" alt="" height="70"></span>
                                     </a>
                                 </div>
 
                                 <form action="{{ route('login') }}" method="post" class="pt-2">
                                     @csrf
                                     <div class="form-group mb-3">
-                                        <label for="emailaddress">Email</label>
+                                        <label for="emailaddress">Adresse e-mail</label>
                                         <input class="form-control" name="email" type="email" id="emailaddress" required="" placeholder="Enter your email">
                                         @error('email')
                                             <small class="text-danger">{{ $message }}</small>
@@ -49,7 +49,7 @@
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <a href="auth-recoverpassword.html" class="text-muted float-right"><small>Forgot your password?</small></a>
+
                                         <label for="password">Mot de passe</label>
                                         <input class="form-control" type="password" name="password" required="" id="password" placeholder="Enter your password">
                                         @error('password')
@@ -58,7 +58,7 @@
                                     </div>
 
                                     <div class="form-group mb-0 text-center">
-                                        <button class="btn btn-success btn-block" type="submit"> Log In </button>
+                                        <button class="btn btn-success btn-block" type="submit"> Se connecter </button>
                                     </div>
 
                                 </form>

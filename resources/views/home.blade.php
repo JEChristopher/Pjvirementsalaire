@@ -11,11 +11,11 @@
             <div class="page-title-box">
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Greeva</a></li>
-                        <li class="breadcrumb-item active">Tableau d</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Tableau de bord</a></li>
+                        <li class="breadcrumb-item active">Tableau de bord</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Dashboard</h4>
+                <h4 class="page-title">Tableau de bord</h4>
             </div>
         </div>
     </div>
@@ -23,7 +23,7 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card text-white bg-danger">
                 <div class="card-body">
                     <blockquote class="card-bodyquote mb-0">
@@ -35,7 +35,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card text-white bg-danger">
                 <div class="card-body">
                     <blockquote class="card-bodyquote mb-0">
@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card text-white bg-danger">
                 <div class="card-body">
                     <blockquote class="card-bodyquote mb-0">
@@ -60,4 +60,16 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
 @endsection

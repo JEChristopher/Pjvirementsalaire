@@ -18,7 +18,7 @@
                         <li class="breadcrumb-item active">Utilisateurs</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Dashboard</h4>
+                <h4 class="page-title"> Gestions des virements mobiles</h4>
             </div>
         </div>
     </div>
@@ -29,9 +29,9 @@
     <div class="row">
         <div class="col-12">
             <div class="card-box">
-                <h4 class="header-title">Buttons example</h4>
+                <h4 class="header-title">Creation des virements</h4>
                 <p class="sub-header">
-                    The Buttons extension for DataTables provides a common set of options, API methods and styling to display buttons on a page that will interact with a DataTable. The core library provides the based framework upon which plug-ins can built.
+                     Dans ce menu, nous creerons des virements.
                 </p>
                 <div class="col-md-12 m-4 text-center">
                     <a href="#custom-modal" class="btn btn-success waves-effect width-md" data-animation="contentscale" data-plugin="custommodal" data-overlaySpeed="100" data-overlayColor="#36404a">Créer un virement</a>
@@ -41,9 +41,9 @@
                     <thead>
                         <tr>
                             <th>Créé le</th>
-                            <th>libelle</th>
-                            <th>description</th>
-                            <th>bordereau</th>
+                            <th>Libelle</th>
+                            <th>Description</th>
+                            <th>Bordereau</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -63,6 +63,8 @@
                                     <a href="{{ route('virements.show', ['id' => $virement->id]) }}" class="btn btn-info btn-sm">Détails</a>
                                     <a href="#" class="btn btn-warning btn-sm">Modifier</a>
                                     <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+
+
                                 </td>
                             </tr>
                         @endforeach
@@ -117,6 +119,7 @@
                         <div class="col-sm-9 text-right">
                             <button type="submit" class="btn btn-success waves-effect waves-light">Créer</button>
                             <button type="reset" class="btn btn-secondary waves-effect waves-light">Annuler</button>
+
                         </div>
                     </div>
                 </form>
